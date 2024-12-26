@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f9;
+      color: #4c5e2f;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+        
+      max-width: 400px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    input[type="text"] {
+      width: calc(100% - 50px);
+      padding: 10px;
+      margin-right: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin: 20px;
+      padding: 10px;
+      border: none;
+      background: #28a745;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      margin: 5px 0;
+      background: #e2d7df;
+      border: 1px solid #0f0101;
+      border-radius: 4px;
+    }
+    li.completed {
+      text-decoration: line-through;
+      color: #df262d;
+    }
+    .delete {
+      background: #f8f5f5;
+      border: none;
+      color: rgb(8, 1, 1);
+      padding: 5px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .delete:hover {
+      background: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <h1>To-Do List</h1>
+  <div class="container">
+    <input type="text" id="taskInput" placeholder="Hey Buddy add a new task...">
+    <button onclick="addTask()">Add</button>
+    <ul id="taskList"></ul>
+  </div>
+  
+  <script>
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    // Load tasks from local storage
+    const loadTasks = () => {
+      const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      tasks.forEach(task => createTaskElement(task.text, task.completed));
+    };
+
+    // Save tasks to local storage
+    const saveTasks = () => {
+      const tasks = [];
+      document.querySelectorAll('#taskList li').forEach(li => {
+        tasks.push({
+          text: li.querySelector('span').textContent,
+          completed: li.classList.contains('completed')
+        });
+      });
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    };
+
+    // Add a new task
+    const addTask = () => {
+      const taskText = taskInput.value.trim();
+      if (taskText) {
+        createTaskElement(taskText);
+        taskInput.value = '';
+        saveTasks();
+      }
+    };
+
+    // Create a task element
+    const createTaskElement = (text, completed = false) => {
+      const li = document.createElement('li');
+      if (completed) li.classList.add('completed');
+
+      const span = document.createElement('span');
+      span.textContent = text;
+      span.addEventListener('click', () => {
+        li.classList.toggle('completed');
+        saveTasks();
+      });
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.classList.add('delete');
+      deleteBtn.addEventListener('click', () => {
+        li.remove();
+        saveTasks();
+      });
+
+      li.appendChild(span);
+      li.appendChild(deleteBtn);
+      taskList.appendChild(li);
+    };
+
+    // Initialize the app
+    loadTasks();
+  </script>
+</body>
+</html>

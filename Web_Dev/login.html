@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <form id="loginForm" method="POST" action="your-server-endpoint-here">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        
+        <button type="submit" id="loginBtn">Login</button>
+    </form>
+
+    <script>
+        // Optional: Handle form submission via JavaScript if needed
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();  // Prevent the default form submission
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Do something with the username and password (e.g., send to a server via fetch or AJAX)
+            console.log("Username:", username);
+            console.log("Password:", password);
+        });
+    </script>
+</body>
+</html>
